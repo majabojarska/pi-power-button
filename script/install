@@ -11,7 +11,7 @@ cd "$(dirname "$0")/.."
 printf "=> Installing power button service...\n"
 
 # Script
-mkdir "${SCRIPT_DIR}"
+mkdir -p "${SCRIPT_DIR}"
 cp "$0/../${SCRIPT_NAME}" "${SCRIPT_DIR}"
 chmod +x "/usr/local/lib/${SCRIPT_NAME}"
 
