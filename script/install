@@ -4,15 +4,15 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-echo "=> Installing shutdown listener...\n"
+echo "=> Installing power button listener...\n"
 sudo cp handle_power_button.py /usr/local/bin/
 sudo chmod +x /usr/local/bin/handle_power_button.py
 
-echo "=> Starting shutdown listener...\n"
+echo "=> Starting power button listener...\n"
 sudo cp handle_power_button.sh /etc/init.d/
 sudo chmod +x /etc/init.d/handle_power_button.sh
 
 sudo update-rc.d handle_power_button.sh defaults
 sudo /etc/init.d/handle_power_button.sh start
 
-echo "Shutdown listener installed.\n"
+echo "power button listener installed.\n"
