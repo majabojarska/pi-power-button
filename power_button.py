@@ -4,9 +4,10 @@ import logging
 import signal
 import subprocess
 from pathlib import Path
+
 import systemd.daemon
-from systemd.journal import JournalHandler
 from RPi import GPIO
+from systemd.journal import JournalHandler
 
 GPIO_BUTTON: int = 3
 SHUTDOWN_DELAY_DEFAULT: int = 1  # min
