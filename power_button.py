@@ -4,7 +4,7 @@ import logging
 import signal
 import subprocess
 from pathlib import Path
-import systemd
+import systemd.daemon
 from RPi import GPIO
 
 GPIO_BUTTON: int = 3
@@ -46,6 +46,8 @@ def _on_press(channel: int) -> None:
 
 def main():
     GPIO.setmode(GPIO.BCM)
+    # To silence warning about using hardware pullup - this is deliberate.
+    GPIO.setwarnings(False)
     GPIO.setup(GPIO_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(
         GPIO_BUTTON, GPIO.FALLING, callback=_on_press, bouncetime=TIME_BOUNCE
@@ -54,3 +56,7 @@ def main():
 
     signal.pause()
     logger.info("stopping listener...")
+
+
+if __name__ == "__main__":
+    main()
