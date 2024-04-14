@@ -6,17 +6,15 @@ SCRIPT_DIR="/usr/local/lib/power_button"
 SCRIPT_NAME="power_button.py"
 SERVICE_NAME="power_button.service"
 
-cd "$(dirname "$0")/.."
-
 printf "=> Installing power button service...\n"
 
 # Script
 mkdir -p "${SCRIPT_DIR}"
-cp "$0/../${SCRIPT_NAME}" "${SCRIPT_DIR}"
+cp "$(dirname "$0")/../${SCRIPT_NAME}" "${SCRIPT_DIR}"
 chmod +x "/usr/local/lib/${SCRIPT_NAME}"
 
 # Systemd unit
-cp "$0/../${SERVICE_NAME}" /etc/init.d/
+cp "$(dirname "$0")/../${SERVICE_NAME}" /etc/init.d/
 chown root:root "/etc/init.d/${SERVICE_NAME}"
 chmod 644 "/etc/init.d/${SERVICE_NAME}"
 
