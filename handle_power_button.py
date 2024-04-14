@@ -34,8 +34,8 @@ def _is_shutdown_scheduled() -> bool:
     return Path("/run/systemd/shutdown/scheduled").exists()
 
 
-def _on_press(arg: int) -> None:
-    logger.debug("button pressed!")
+def _on_press(channel: int) -> None:
+    logger.debug("button pressed (channel %s)!", channel)
     if _is_shutdown_scheduled():
         logger.info("shutdown already scheduled")
         _cancel_shutdown()
