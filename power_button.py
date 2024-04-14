@@ -1,22 +1,24 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import logging
 import signal
 import subprocess
 from pathlib import Path
 import systemd.daemon
+from systemd.journal import JournalHandler
 from RPi import GPIO
 
 GPIO_BUTTON: int = 3
 SHUTDOWN_DELAY_DEFAULT: int = 1  # min
-TIME_BOUNCE = 3000  # ms
+TIME_BOUNCE = 500  # ms
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__name__)
+log.addHandler(JournalHandler())
+log.setLevel(logging.DEBUG)
 
 
 def _schedule_shutdown(time: int = SHUTDOWN_DELAY_DEFAULT) -> None:
-    logger.info("scheduling shutdown")
+    log.info("scheduling shutdown")
     subprocess.call(
         ["shutdown", "--poweroff", str(time), "shutdown scheduled via power button"],
         shell=False,
@@ -24,7 +26,7 @@ def _schedule_shutdown(time: int = SHUTDOWN_DELAY_DEFAULT) -> None:
 
 
 def _cancel_shutdown() -> None:
-    logger.info("cancelling shutdown")
+    log.info("cancelling shutdown")
     subprocess.call(
         ["shutdown", "-c", "shutdown cancelled via power button"], shell=False
     )
@@ -35,9 +37,9 @@ def _is_shutdown_scheduled() -> bool:
 
 
 def _on_press(channel: int) -> None:
-    logger.debug("button pressed (channel %s)!", channel)
+    log.debug("button pressed (channel %s)", channel)
     if _is_shutdown_scheduled():
-        logger.info("shutdown already scheduled")
+        log.info("found scheduled shutdown")
         _cancel_shutdown()
         return
 
@@ -55,7 +57,7 @@ def main():
     systemd.daemon.notify("READY=1")
 
     signal.pause()
-    logger.info("stopping listener...")
+    log.info("stopping listener...")
 
 
 if __name__ == "__main__":
