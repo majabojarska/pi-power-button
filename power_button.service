@@ -20,9 +20,6 @@ Restart=on-failure
 # Our service will notify systemd once it is up and running
 Type=notify
 
-# Use a dedicated user to run our service
-User=power_button_service
-
 [Install]
 
 # Tell systemd to automatically start this service when the system boots
