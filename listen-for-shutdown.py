@@ -31,8 +31,9 @@ def _on_click() -> None:
     if _is_shutdown_scheduled():
         logger.info("shutdown already scheduled")
         _cancel_shutdown()
-    else:
-        _schedule_shutdown()
+        return
+
+    _schedule_shutdown()
 
 
 def serve():
