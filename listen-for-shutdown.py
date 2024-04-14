@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
 import logging
+import signal
 import subprocess
-import time
 from pathlib import Path
 
-import RPi.GPIO as GPIO
+from gpiozero import Button
 
 GPIO_BUTTON: int = 3
 SHUTDOWN_DELAY_DEFAULT: int = 30
+TIME_BOUNCE = 0.8
 
 logger = logging.getLogger(__name__)
 
@@ -36,20 +37,9 @@ def _on_click() -> None:
     _schedule_shutdown()
 
 
-def listen():
-    while True:
-        GPIO.wait_for_edge(GPIO_BUTTON, GPIO.FALLING)
-        logger.info("power button pressed")
-        _on_click()
-
-        time.sleep(1)
-
-
-def _setup_gpio():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(GPIO_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-
 if __name__ == "__main__":
-    _setup_gpio()
-    listen()
+    button = Button(
+        pin=GPIO_BUTTON, pull_up=True, bounce_time=TIME_BOUNCE, when_pressed=_on_click
+    )
+    logger.info("button listener configured")
+    signal.pause()
