@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+import logging
+import subprocess
+import time
+from pathlib import Path
 
 import RPi.GPIO as GPIO
-import subprocess
-from pathlib import Path
-import logging
 
 GPIO_BUTTON: int = 3
 SHUTDOWN_DELAY_DEFAULT: int = 30
