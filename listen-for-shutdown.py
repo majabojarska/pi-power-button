@@ -36,7 +36,7 @@ def _on_click() -> None:
     _schedule_shutdown()
 
 
-def serve():
+def listen():
     while True:
         GPIO.wait_for_edge(GPIO_BUTTON, GPIO.FALLING)
         logger.info("power button pressed")
@@ -50,4 +50,4 @@ def _setup_gpio():
 
 if __name__ == "__main__":
     _setup_gpio()
-    serve()
+    listen()
