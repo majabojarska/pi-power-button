@@ -2,15 +2,18 @@
 
 set -e
 
+SCRIPT_DIR="/usr/local/lib/power_button"
+SERVICE_NAME="power_button.service"
+
 cd "$(dirname "$0")/.."
 
-echo "=> Stopping power button listener...\n"
-sudo update-rc.d handle_power_button.sh remove
-sudo /etc/init.d/handle_power_button.sh stop
+printf "=> Stopping and disabling power button service...\n"
+systemctl disable --now power_button.service
 
-echo "=> Removing power button listener...\n"
-sudo rm -rf /usr/local/bin/handle_power_button.py
-sudo rm -rf /etc/init.d/handle_power_button.sh
+printf "=> Uninstalling power button service...\n"
+# Systemd unit
+rm -f "/etc/init.d/${SERVICE_NAME}"
+# Script
+rm -rf "${SCRIPT_DIR}"
 
-echo "power button listener uninstalled.\n"
-echo "Check out howchoo.com for more awesome Pi projects!"
+printf "=> Power button service uninstalled...\n"

@@ -1,18 +1,26 @@
-#! /bin/sh
+#!/bin/sh
 
 set -e
 
+SCRIPT_DIR="/usr/local/lib/power_button"
+SCRIPT_NAME="power_button.py"
+SERVICE_NAME="power_button.service"
+
 cd "$(dirname "$0")/.."
 
-echo "=> Installing power button listener...\n"
-sudo cp handle_power_button.py /usr/local/bin/
-sudo chmod +x /usr/local/bin/handle_power_button.py
+printf "=> Installing power button service...\n"
 
-echo "=> Starting power button listener...\n"
-sudo cp handle_power_button.sh /etc/init.d/
-sudo chmod +x /etc/init.d/handle_power_button.sh
+# Script
+mkdir "${SCRIPT_DIR}"
+cp "$0/${SCRIPT_NAME}" "${SCRIPT_DIR}"
+chmod +x "/usr/local/lib/${SCRIPT_NAME}"
 
-sudo update-rc.d handle_power_button.sh defaults
-sudo /etc/init.d/handle_power_button.sh start
+# Systemd unit
+cp "$0/${SERVICE_NAME}" /etc/init.d/
+chown root:root "/etc/init.d/${SERVICE_NAME}"
+chmod 644 "/etc/init.d/${SERVICE_NAME}"
 
-echo "power button listener installed.\n"
+printf "=> Enabling and starting power button service...\n"
+systemctl enable --now power_button.service
+
+printf "=> Power button service installed...\n"

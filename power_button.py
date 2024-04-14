@@ -4,7 +4,7 @@ import logging
 import signal
 import subprocess
 from pathlib import Path
-
+import systemd
 from RPi import GPIO
 
 GPIO_BUTTON: int = 3
@@ -50,6 +50,7 @@ def main():
     GPIO.add_event_detect(
         GPIO_BUTTON, GPIO.FALLING, callback=_on_press, bouncetime=TIME_BOUNCE
     )
+    systemd.daemon.notify("READY=1")
 
     signal.pause()
     logger.info("stopping listener...")
