@@ -42,6 +42,8 @@ def listen():
         logger.info("power button pressed")
         _on_click()
 
+        time.sleep(1)
+
 
 def _setup_gpio():
     GPIO.setmode(GPIO.BCM)
